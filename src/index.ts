@@ -1,4 +1,4 @@
-import './pre-start'; // Must be the first import
+import './pre-start'; // Must be the first import  启动前脚本执行
 import logger from 'jet-logger';
 
 import EnvVars from '@configurations/EnvVars';

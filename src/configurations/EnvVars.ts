@@ -1,5 +1,6 @@
 /* eslint-disable node/no-process-env */
 
+// 环境变量的映射以及导出
 export default {
   nodeEnv: (process.env.NODE_ENV ?? ''),
   port: (process.env.PORT ?? 0),

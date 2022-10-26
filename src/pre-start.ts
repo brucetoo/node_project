@@ -27,6 +27,7 @@ const options = commandLineArgs([
 // **** Set the env file **** //
 
 const result2 = dotenv.config({
+  // 根据命令行参数配置环境变量的path路径，再转换到process.env中
   path: path.join(__dirname, `../env/${String(options.env)}.env`),
 });
 

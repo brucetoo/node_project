@@ -4,6 +4,7 @@ import path from 'path';
 import helmet from 'helmet';
 import express, { Request, Response, NextFunction } from 'express';
 
+// express 支持 async errors
 import 'express-async-errors';
 
 import BaseRouter from './routes/api';
