@@ -2,6 +2,7 @@
 ### express-generator-typescript
 express架构ts版本模板
 https://github.com/seanpmaxwell/express-generator-typescript#readme
+包含了代码模板，一系列可用的依赖工具包等
 
 ### ts-node
 是可以直接执行ts文件，而不需要通过webpack在编译为js去运行
@@ -50,5 +51,73 @@ const options = commandLineArgs([
 ```
 
 ### dotenv
-将 .env 文件的环境变量添加到 `process.env` 中
+将 .env 文件中配置的 `环境变量` 添加到 `process.env` 中，通常是为了在启动之前设置环境变量的，在此工程中，可以参考 pre-start.ts
 
+### express-async-errors
+在express中支持  async functions
+```
+const express = require('express');
+// 在use调用前引入即可
+require('express-async-errors');
+const User = require('./models/user');
+const app = express();
+ 
+// 这里就能使用 async,await语法糖
+app.get('/users', async (req, res) => {
+  const users = await User.findAll();
+  res.send(users);
+});
+```
+
+### helmet
+Helmet helps you secure your Express apps by setting various HTTP headers.
+具体有比较多的安全header的设置看这个
+https://juejin.cn/post/6844903702935896077
+```
+// 默认的设置
+Content-Security-Policy: default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests
+Cross-Origin-Embedder-Policy: require-corp
+Cross-Origin-Opener-Policy: same-origin
+Cross-Origin-Resource-Policy: same-origin
+Origin-Agent-Cluster: ?1
+Referrer-Policy: no-referrer
+Strict-Transport-Security: max-age=15552000; includeSubDomains
+X-Content-Type-Options: nosniff
+X-DNS-Prefetch-Control: off
+X-Download-Options: noopen
+X-Frame-Options: SAMEORIGIN
+X-Permitted-Cross-Domain-Policies: none
+X-XSS-Protection: 0
+```
+
+### jet-logger
+Jet-Logger is an easy to configure logging tool that allows you change settings via the environment variables (recommended) or manually in code
+可以通过命令行参数配置的方式来控制log的一种工具
+JET_LOGGER_MODE: can be 'CONSOLE'(default), 'FILE', 'CUSTOM', and 'OFF'.
+JET_LOGGER_FILEPATH: the file-path for file mode. Default is _home_dir/jet-logger.log_.
+JET_LOGGER_FILEPATH_DATETIME: prepend the log file name with the datetime. Can be 'TRUE' (default) or 'FALSE'.
+JET_LOGGER_TIMESTAMP: adds a timestamp next to each log. Can be 'TRUE' (default) or 'FALSE'.
+JET_LOGGER_FORMAT: formats log as a line or JSON object. Can be 'LINE' (default) or 'JSON'.
+在此工程中，可以参考 `development.env` 和 `production.env` 中jet-logger的配置
+
+### jsonfile
+Writing JSON.stringify() and then fs.writeFile() and JSON.parse() with fs.readFile() enclosed in try/catch blocks became annoying.
+json文件的读，写工具类；支持promise和sync模式
+https://www.npmjs.com/package/jsonfile
+
+### jsonwebtoken
+header.payload.signature 三个组成的字符串（不需要在服务端保存用户的认证信息，区别于传统的session）
+详情可见分析：https://blog.csdn.net/weixin_43527871/article/details/123120835
+具体的使用：https://www.npmjs.com/package/jsonwebtoken
+
+### bcrypt
+单向hash加密的工具，用于加密密码，存储在db，通过salt 来控制次数，越大越安全。支持同步和异步
+```ts
+    bcrypt.hash(pwd, saltRounds);
+    bcrypt.hashSync(pwd, saltRounds);
+    bcrypt.compare(pwd, hash);
+```
+
+### morgan
+https://www.npmjs.com/package/morgan
+HTTP request logger middleware for node.js

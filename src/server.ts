@@ -9,6 +9,11 @@ import 'express-async-errors';
 
 import BaseRouter from './routes/api';
 import logger from 'jet-logger';
+// 在ts.config配置后，无法在node环境中直接使用（node启动编译js资源），需要使用引入module-alias在命令行启动
+// node -r module-alias/register ./dist --env=production
+// 如果是用ts-node启动 ts 入口文件，需要通过 tsconfig-paths 来配合
+// ts-node --files -r tsconfig-paths/register ./src
+// --files 是指定文件目录，-r表示需要预加载指定模块
 import EnvVars from '@configurations/EnvVars';
 import HttpStatusCodes from '@configurations/HttpStatusCodes';
 import { NodeEnvs } from '@declarations/enums';
@@ -28,6 +33,7 @@ app.use(cookieParser(EnvVars.cookieProps.secret));
 
 // Show routes called in console during development
 if (EnvVars.nodeEnv === NodeEnvs.Dev) {
+  // 所有http请求的log输出
   app.use(morgan('dev'));
 }
 
