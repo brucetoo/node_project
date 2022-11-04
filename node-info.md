@@ -26,6 +26,11 @@ https://github.com/seanpmaxwell/express-generator-typescript#readme
 但是经过tsc变化后的ts代码，由于仍然存在 @符号，在node中运行时就因为无法识别路径导致异常
 这就是 module-alias 存在的目的
 在package.json中新增 _moduleAliases 进行路径配置（打包后的路径，在此工程中是 ./dist ）
+详细见：
+```node -r module-alias/register ./dist --env=production```
+`-r module-alias/register` 表示注册模块别名 
+`./dist` 运行路径  已经在 moduleAliases 配置了路径别名对应的映射关系
+比如：`"@services": "dist/services"`
 
 ### jasmine
 一个命令行工具，https://www.npmjs.com/package/jasmine 运行node环境下的 Jasmine(https://github.com/jasmine/jasmine) specs 
@@ -37,9 +42,10 @@ https://github.com/seanpmaxwell/express-generator-typescript#readme
 找文件，文件夹等 https://www.npmjs.com/package/find
 
 ### command-line-args
-（执行某个文件的命令行参数）解析命令行的值，另有他用 https://www.npmjs.com/package/command-line-args
-比如在 pre-start中  `ts-node --files -r tsconfig-paths/register ./src`
+（node执行某个文件的命令行参数）解析命令行的值，另有他用 https://www.npmjs.com/package/command-line-args
+比如在 pre-start中  `node -r module-alias/register ./dist --env=production`
 ```
+配置了 --env 解析出来后 options.env = production, 如没有配置--env参数，则是默认值 development
 const options = commandLineArgs([
   {
     name: 'env',
@@ -92,7 +98,7 @@ X-XSS-Protection: 0
 
 ### jet-logger
 Jet-Logger is an easy to configure logging tool that allows you change settings via the environment variables (recommended) or manually in code
-可以通过命令行参数配置的方式来控制log的一种工具
+可以通过命令行参数配置的方式来控制log的一种工具（相当于一个日志管理类，还可存在文件中）
 JET_LOGGER_MODE: can be 'CONSOLE'(default), 'FILE', 'CUSTOM', and 'OFF'.
 JET_LOGGER_FILEPATH: the file-path for file mode. Default is _home_dir/jet-logger.log_.
 JET_LOGGER_FILEPATH_DATETIME: prepend the log file name with the datetime. Can be 'TRUE' (default) or 'FALSE'.
@@ -121,3 +127,28 @@ header.payload.signature 三个组成的字符串（不需要在服务端保存�
 ### morgan
 https://www.npmjs.com/package/morgan
 HTTP request logger middleware for node.js
+
+### nodemon 
+自动监听node的文件变化，重启
+常见的配置方式：https://juejin.cn/post/6844904191316459527
+1. 命令行配置
+```
+    nodemon -e ts,js,json ./dist/bin/www.js
+    监听对应后缀名的变化（ts,js,json）
+    运行 ./dist/bin/www.js 文件
+```
+2. package.json 配置
+```
+"nodemonConfig": {
+    "watch": [  // 监听的目录
+      "src"
+    ],
+    "ext": "ts, html",  // 后缀名
+    "ignore": [ // 忽略的问题
+      "src/public"
+    ],  // 执行的脚本（在此是直接通过ts-node运行 ./src/index.ts 入口文件）
+    "exec": "./node_modules/.bin/ts-node --files -r tsconfig-paths/register ./src"
+  }
+```
+3. 通过nodemon.json 外部文件配置
+```nodemon --config ./spec/nodemon.json```

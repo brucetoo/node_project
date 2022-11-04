@@ -13,7 +13,7 @@ import commandLineArgs from 'command-line-args';
 
 
 // **** Setup command line options **** //
-
+// 解析运行的命令行参数，通过传入的环境变量来确定应该将 哪个环境变量描述的文件加载到process.env中
 const options = commandLineArgs([
   {
     name: 'env',
@@ -27,7 +27,7 @@ const options = commandLineArgs([
 // **** Set the env file **** //
 
 const result2 = dotenv.config({
-  // 根据命令行参数配置环境变量的path路径，再转换到process.env中
+  // 根据命令行参数配置环境变量的path路径，定位到对应 .env 文件，再转换到process.env中
   path: path.join(__dirname, `../env/${String(options.env)}.env`),
 });
 

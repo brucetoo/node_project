@@ -6,7 +6,8 @@ import fs from 'fs-extra';
 import logger from 'jet-logger';
 import childProcess from 'child_process';
 
-
+// 构建的时候通过 package.json 的 build脚本执行此ts文件。使用到 ts-node 直接运行ts文件
+// 主要是将前端代码cp到public位置
 // Start
 (async () => {
   try {

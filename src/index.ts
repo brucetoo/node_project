@@ -1,3 +1,4 @@
+// 主要是处理脚本的运行环境变量
 import './pre-start'; // Must be the first import  启动前脚本执行
 import logger from 'jet-logger';
 

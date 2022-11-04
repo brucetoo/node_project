@@ -1,6 +1,8 @@
 /* eslint-disable node/no-process-env */
 
 // 环境变量的映射以及导出
+// 当pre-start文件执行后，命令行参数对应的.env文件中的配置的环境变量已经
+// 存储在了 process.env 中，在此直接读取即可
 export default {
   nodeEnv: (process.env.NODE_ENV ?? ''),
   port: (process.env.PORT ?? 0),
